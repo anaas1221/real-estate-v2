@@ -1,0 +1,1755 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>العالمية للاستثمار العقاري</title>
+    <link href="img/logo 2.jpeg" rel="icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e5a8a;
+            --primary-dark: #14456a;
+            --primary-light: #4a90c2;
+            --accent: #f5a623;
+            --accent-light: #f7c46b;
+            --bg-light: #f8f9fa;
+            --text-dark: #212529;
+            --text-muted: #6c757d;
+            --border: #e9ecef;
+            --success: #28a745;
+            --danger: #dc3545;
+            --radius: 10px;
+            --radius-lg: 16px;
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Cairo", sans-serif;
+            color: var(--text-dark);
+            background: #ffffff;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* ================== Header ================== */
+        .header {
+            background: #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent);
+        }
+
+        .logo-text {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+        }
+
+        .logo-text span {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            font-weight: 600;
+            color: var(--text-dark);
+            transition: color .2s;
+            padding: 8px 0;
+            position: relative;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width .3s;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .btn-primary-custom {
+            background: var(--primary);
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            border: none;
+            transition: background .2s;
+        }
+
+        .btn-primary-custom:hover {
+            background: var(--primary-dark);
+        }
+
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -280px;
+            width: 280px;
+            height: 100vh;
+            background: #fff;
+            box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 1050;
+            padding: 30px;
+            transition: right .3s;
+        }
+
+        .mobile-menu.open {
+            right: 0;
+        }
+
+        .mobile-menu ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .mobile-menu li a {
+            display: block;
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+        }
+
+        .mobile-menu .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            position: absolute;
+            top: 15px;
+            left: 15px;
+        }
+
+        /* ================== Hero ================== */
+        .hero {
+            color: var(--text-dark);
+            padding: 80px 0 100px;
+            position: relative;
+            background-image: url('img/header.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background: #fff;
+            border-radius: 30px 30px 0 0;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(255, 255, 255, 0.7);
+        }
+
+        .hero h1 span {
+            color: var(--primary-dark);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: .9;
+            margin-bottom: 30px;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-shadow: 0 2px 8px rgba(255, 255, 255, 0.6);
+        }
+
+        /* ================== Search Section ================== */
+        .search-section {
+            position: relative;
+            margin-top: -50px;
+            z-index: 10;
+            padding-bottom: 30px;
+        }
+
+        .search-box {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: 30px;
+            border: 1px solid var(--border);
+        }
+
+        .search-tabs {
+            display: flex;
+            gap: 5px;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 15px;
+        }
+
+        .search-tab {
+            background: none;
+            border: none;
+            padding: 10px 25px;
+            font-weight: 700;
+            color: var(--text-muted);
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .search-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* Quick contact */
+        .quick-contact {
+            display: flex;
+            justify-content: flex-start;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+            padding: 10px 20px;
+            border-radius: 50px;
+        }
+
+        .quick-contact a {
+            font-weight: 700;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color .2s;
+        }
+
+        .quick-contact a:hover {
+            color: var(--primary);
+        }
+
+        .quick-contact i {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .search-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+        }
+
+        .search-field label {
+            display: block;
+            font-size: .85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .search-field input,
+        .search-field select {
+            width: 100%;
+            height: 48px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 0 12px;
+            background: #f9f9f9;
+            transition: all .2s;
+        }
+
+        .search-field input:focus,
+        .search-field select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 90, 138, 0.1);
+            background: #fff;
+        }
+
+        .btn-search {
+            height: 48px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 700;
+            width: 100%;
+            cursor: pointer;
+            transition: background .2s;
+        }
+
+        .btn-search:hover {
+            background: var(--primary-dark);
+        }
+
+        /* ================== Properties Section ================== */
+        .section-padding {
+            padding: 70px 0;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .section-subtitle {
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .property-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .property-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: transform .3s, box-shadow .3s;
+        }
+
+        .property-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .property-image {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+            background: #eee;
+        }
+
+        .property-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .5s;
+        }
+
+        .property-card:hover .property-image img {
+            transform: scale(1.1);
+        }
+
+        .property-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: .8rem;
+            font-weight: 700;
+            color: #fff;
+            background: var(--primary);
+            z-index: 2;
+        }
+
+        .badge-rent {
+            background: var(--success);
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 50px;
+            right: 15px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: .75rem;
+            font-weight: 700;
+            z-index: 2;
+            color: #fff;
+        }
+
+        .status-available {
+            background: #10B981;
+        }
+
+        .status-unavailable {
+            background: #6B7280;
+        }
+
+        .status-sold {
+            background: #EF4444;
+        }
+
+        .status-rented {
+            background: #F5A623;
+        }
+
+        .favorite-btn {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: #fff;
+            border: none;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-sm);
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            transition: .2s;
+            z-index: 2;
+        }
+
+        .favorite-btn:hover {
+            color: var(--danger);
+        }
+
+        .favorite-btn.active {
+            color: var(--danger);
+        }
+
+        .property-price {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: #fff;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 800;
+            color: var(--primary);
+            box-shadow: var(--shadow-sm);
+            z-index: 2;
+        }
+
+        .property-body {
+            padding: 20px;
+        }
+
+        .property-type {
+            font-size: .8rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .property-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .property-location {
+            font-size: .9rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .property-features {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid var(--border);
+            padding-top: 15px;
+            margin-bottom: 15px;
+            font-size: .9rem;
+            color: var(--text-muted);
+        }
+
+        .property-features span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .property-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-view {
+            flex: 1;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: background .2s;
+        }
+
+        .btn-view:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-wa {
+            background: #25d366;
+            color: #fff;
+            border: none;
+            width: 42px;
+            height: 42px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .btn-share {
+            background: #6c757d;
+            color: #fff;
+            border: none;
+            width: 42px;
+            height: 42px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background .2s;
+        }
+
+        .btn-share:hover {
+            background: #5a6268;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 50px;
+            color: var(--text-muted);
+        }
+
+        /* ================== Why Us ================== */
+        .why-section {
+            background: var(--bg-light);
+        }
+
+        .why-card {
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 30px;
+            text-align: center;
+            height: 100%;
+            border: 1px solid var(--border);
+            transition: transform .2s;
+        }
+
+        .why-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .why-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .why-card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .why-card p {
+            color: var(--text-muted);
+            font-size: .9rem;
+        }
+
+        /* ================== About Section ================== */
+        .about-section {
+            background: #fff;
+        }
+
+        .about-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .about-image {
+            flex: 1;
+        }
+
+        .about-image img {
+            width: 100%;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .about-content {
+            flex: 1;
+        }
+
+        .about-content .section-label {
+            display: inline-block;
+            background: rgba(30, 90, 138, 0.1);
+            color: var(--primary);
+            font-weight: 700;
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: .8rem;
+            margin-bottom: 15px;
+        }
+
+        .about-content h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .about-content p {
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .about-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .about-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .about-list li i {
+            color: var(--success);
+            font-size: 1.2rem;
+        }
+
+        /* ================== Contact ================== */
+        .contact-section {
+            background: var(--bg-light);
+        }
+
+        .contact-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            background: #fff;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+
+        .contact-info {
+            background: var(--primary-dark);
+            color: #fff;
+            padding: 40px;
+        }
+
+        .contact-info h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .contact-item i {
+            font-size: 1.3rem;
+            color: var(--accent);
+        }
+
+        .contact-item a,
+        .contact-item span {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .contact-form {
+            padding: 40px;
+        }
+
+        .contact-form h3 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .form-control,
+        .form-select {
+            height: 50px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: #fafafa;
+            margin-bottom: 15px;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 90, 138, 0.1);
+        }
+
+        .btn-submit {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 14px;
+            border-radius: var(--radius);
+            font-weight: 700;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .btn-submit:hover {
+            background: var(--primary-dark);
+        }
+
+        /* ================== Footer ================== */
+        .footer {
+            background: #0d1b2a;
+            color: #b0b8c2;
+            padding: 60px 0 20px;
+        }
+
+        .footer h4 {
+            color: #fff;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .footer a {
+            color: #b0b8c2;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .footer a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 40px;
+            padding-top: 20px;
+            text-align: center;
+            font-size: .9rem;
+        }
+
+        /* ================== Modal ================== */
+        .modal-content {
+            border: none;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+
+        .modal-property-img {
+            height: 400px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .modal-info-panel {
+            padding: 30px;
+        }
+
+        .detail-price {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .detail-feature {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: var(--radius);
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .detail-feature i {
+            display: block;
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        /* ================== Share Modal ================== */
+        .share-modal-header {
+            background: var(--primary);
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        }
+
+        .share-modal-body {
+            padding: 20px;
+        }
+
+        .share-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .share-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all .2s;
+            text-align: center;
+        }
+
+        .share-option:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary);
+        }
+
+        .share-option i {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .share-option span {
+            font-weight: 700;
+            font-size: .9rem;
+        }
+
+        /* ================== Responsive ================== */
+        @media (max-width: 991px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .search-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .property-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .contact-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .about-wrapper {
+                flex-direction: column;
+            }
+
+            .about-image img {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .search-row {
+                grid-template-columns: 1fr;
+            }
+
+            .property-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero {
+                padding: 60px 0 80px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <a href="#home" class="logo">
+                <img src="img/logo 2.jpeg" alt="logo">
+                <span class="logo-text"><span>العالمية</span> للاستثمار العقاري</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#home" class="active">الرئيسية</a></li>
+                <li><a href="#properties">العقارات</a></li>
+                <li><a href="#about">من نحن</a></li>
+                <li><a href="#why">لماذا نحن</a></li>
+                <li><a href="#contact">تواصل معنا</a></li>
+            </ul>
+            <div>
+                <button class="hamburger" id="menuToggle"><i class="bi bi-list"></i></button>
+                <a href="#contact" class="btn-primary-custom">ابحث عن عقارك</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="close-btn" id="closeMenu"><i class="bi bi-x-lg"></i></button>
+        <ul>
+            <li><a href="#home">الرئيسية</a></li>
+            <li><a href="#properties">العقارات</a></li>
+            <li><a href="#about">من نحن</a></li>
+            <li><a href="#why">لماذا نحن</a></li>
+            <li><a href="#contact">تواصل معنا</a></li>
+        </ul>
+        <a href="#contact" class="btn-primary-custom mt-4 d-block text-center">ابحث عن عقارك</a>
+    </div>
+
+    <!-- Hero -->
+    <section id="home" class="hero">
+        <div class="container hero-content">
+            <h1>عقارك المناسب <br><span>يبدأ من هنا</span></h1>
+            <p style="border: solid yellow;
+    background-color: rgb(255, 255, 0);
+    border-radius: 50px;
+    color: black;">نساعدك في العثور على أفضل العقارات للبيع والإيجار في أفضل المواقع.</p>
+            <div class="hero-buttons">
+                <a href="#properties" class="btn-outline-custom"
+                    style="background: var(--primary); color: #fff; padding: 10px 24px; border-radius: 50px; font-weight: 600; border: none;">تصفح
+                    العقارات</a>
+                <a href="#contact" class="btn-primary-custom">تواصل معنا</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <div class="search-section">
+        <div class="container">
+            <div class="search-box">
+                <div class="search-tabs">
+                    <button class="search-tab active" data-purpose="all">الكل</button>
+                    <button class="search-tab" data-purpose="sale">للبيع</button>
+                    <button class="search-tab" data-purpose="rent">للإيجار</button>
+                </div>
+
+                <div class="quick-contact">
+                    <a href="tel:+201140093481"><i class="bi bi-telephone"></i> 01140093481</a>
+                    <a href="https://wa.me/201140093481" target="_blank"><i class="bi bi-whatsapp"></i> واتساب</a>
+                </div>
+
+                <div class="search-row">
+                    <div class="search-field">
+                        <label>نوع العقار</label>
+                        <select id="searchType">
+                            <option value="all">الكل</option>
+                            <option value="apartment">شقة</option>
+                            <option value="villa">فيلا</option>
+                            <option value="chalet">شاليه</option>
+                            <option value="office">مكتب</option>
+                            <option value="shop">محل تجاري</option>
+                        </select>
+                    </div>
+                    <div class="search-field">
+                        <label>المنطقة</label>
+                        <select id="searchArea">
+                            <option value="all">كل المناطق</option>
+                        </select>
+                    </div>
+                    <div class="search-field">
+                        <label>السعر حتى</label>
+                        <input type="number" id="searchPrice" placeholder="مثال: 5000000">
+                    </div>
+                    <div class="search-field">
+                        <label>غرف النوم</label>
+                        <select id="searchRooms">
+                            <option value="all">أي عدد</option>
+                            <option value="1">1+</option>
+                            <option value="2">2+</option>
+                            <option value="3">3+</option>
+                            <option value="4">4+</option>
+                            <option value="5">5+</option>
+                        </select>
+                    </div>
+                    <div class="search-field">
+                        <button id="searchBtn" class="btn-search"><i class="bi bi-search"></i> بحث</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Properties -->
+    <section id="properties" class="section-padding">
+        <div class="container">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">أحدث العقارات</h2>
+                    <p class="section-subtitle">مجموعة من أفضل العقارات المتاحة لدينا حالياً</p>
+                </div>
+                <button class="btn-primary-custom" onclick="resetFilters()">عرض الكل</button>
+            </div>
+            <div id="propertiesGrid" class="property-grid"></div>
+            <div id="noResults" class="no-results d-none">
+                <i class="bi bi-search fs-1"></i>
+                <h4>لم نجد عقارات مطابقة</h4>
+                <p>جرب تغيير الفلاتر أو البحث مرة أخرى.</p>
+                <button class="btn-primary-custom" onclick="resetFilters()">إعادة البحث</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section id="why" class="section-padding why-section">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title">لماذا تختارنا؟</h2>
+                <p class="section-subtitle mx-auto">نحرص على تقديم أفضل تجربة عقارية لعملائنا</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-3 col-sm-6">
+                    <div class="why-card">
+                        <div class="why-icon"><i class="bi bi-award"></i></div>
+                        <h3>خبرة موثوقة</h3>
+                        <p>أكثر من 20 عامًا من الخبرة في السوق العقاري</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="why-card">
+                        <div class="why-icon"><i class="bi bi-building-check"></i></div>
+                        <h3>عقارات متنوعة</h3>
+                        <p>مجموعة واسعة من العقارات السكنية والتجارية والاستثمارية.</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="why-card">
+                        <div class="why-icon"><i class="bi bi-search-heart"></i></div>
+                        <h3>بحث سهل</h3>
+                        <p>أدوات بحث متقدمة تساعدك في الوصول لهدفك بسرعة.</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="why-card">
+                        <div class="why-icon"><i class="bi bi-headset"></i></div>
+                        <h3>متابعة كاملة</h3>
+                        <p>فريق متخصص يرافقك من أول اتصال حتى استلام المفتاح.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section-padding about-section">
+        <div class="container">
+            <div class="about-wrapper">
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80"
+                        alt="العالمية">
+                </div>
+                <div class="about-content">
+                    <span class="section-label">من نحن</span>
+                    <h2>العالمية للاستثمار العقاري</h2>
+                    <p>نحن شركة رائدة في مجال الاستثمار العقاري، نقدم حلولاً متكاملة للبيع، الشراء، والتأجير. نعمل بثقة
+                        وشفافية لنضمن لك أفضل تجربة عقارية في مصر.</p>
+                    <ul class="about-list">
+                        <li><i class="bi bi-check-circle-fill"></i> عقارات موثوقة ومراجعة بعناية</li>
+                        <li><i class="bi bi-check-circle-fill"></i> أسعار مناسبة للسوق</li>
+                        <li><i class="bi bi-check-circle-fill"></i> متابعة شخصية لكل عميل</li>
+                        <li><i class="bi bi-check-circle-fill"></i> مصداقية وشفافية في التعامل</li>
+                    </ul>
+                    <a href="#contact" class="btn-primary-custom px-5 py-2">تواصل معنا</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section-padding contact-section">
+        <div class="container">
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <h2>جاهز تلاقي<br>بيتك الجديد؟</h2>
+                    <p>سيب بياناتك وإحنا هنتواصل معاك في أقرب وقت.</p>
+                    <div class="contact-item">
+                        <i class="bi bi-telephone"></i>
+                        <a href="tel:+201140093481">01140093481</a>
+                    </div>
+                    <div class="contact-item">
+                        <i class="bi bi-whatsapp"></i>
+                        <a href="https://wa.me/201140093481" target="_blank">واتساب</a>
+                    </div>
+                    <div class="contact-item">
+                        <i class="bi bi-geo-alt"></i>
+                        <span>مصر</span>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <h3>ابعتلنا طلبك</h3>
+                    <form id="contactForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" placeholder="اسمك" required>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="tel" class="form-control" placeholder="01xxxxxxxxx" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <select class="form-select">
+                                    <option value="شراء عقار">شراء عقار</option>
+                                    <option value="ايجار عقار">ايجار عقار</option>
+                                    <option value="بيع عقار">بيع عقار</option>
+                                    <option value="تأجير عقار">تأجير عقار</option>
+                                    <option value="تقييم عقار">تقييم عقار</option>
+                                    <option value="استشاره عقاريه">استشاره عقاريه</option>
+                                    <option value="طلب معاينه عقار">طلب معاينه عقار</option>
+                                    <option value="اخري">اخري</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <select id="contactArea" class="form-select">
+                                    <option value="">اختر المنطقة</option>
+                                </select>
+                            </div>
+                        </div>
+                        <textarea class="form-control" rows="4" placeholder="اكتب تفاصيل طلبك..."></textarea>
+                        <button type="submit" class="btn-submit">إرسال الطلب <i class="bi bi-send"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6">
+                    <div class="logo mb-3">
+                        <img src="img/logo 2.jpeg" alt="logo" style="width: 40px; height: 40px;">
+                        <span class="logo-text text-white">العالمية للاستثمار العقاري</span>
+                    </div>
+                    <p style="font-size: .9rem;">نساعدك في العثور على العقار المناسب بأفضل سعر وفي أفضل مكان.</p>
+                    <div>
+                        <a href="#"><i class="bi bi-facebook fs-4"></i></a>
+                        <a href="#"><i class="bi bi-whatsapp fs-4"></i></a>
+                        <a href="#"><i class="bi bi-youtube fs-4"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h4>روابط سريعة</h4>
+                    <a href="#home">الرئيسية</a>
+                    <a href="#properties">العقارات</a>
+                    <a href="#about">من نحن</a>
+                    <a href="#contact">تواصل معنا</a>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h4>تواصل معنا</h4>
+                    <a href="tel:+201140093481"><i class="bi bi-telephone"></i> 01140093481</a>
+                    <a href="https://wa.me/201140093481"><i class="bi bi-whatsapp"></i> واتساب</a>
+                    <span>مصر</span>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h4>المناطق</h4>
+                    <a href="#about">سموحة</a>
+                    <a href="#about">كفر عبده</a>
+                    <a href="#about">ستانلي</a>
+                    <a href="#about">سيدي بشر</a>
+                    <a href="#about">العصافرة</a>
+                </div>
+            </div>
+            <div class="footer-bottom">جميع الحقوق محفوظة © العالمية للاستثمار العقاري 2025</div>
+        </div>
+    </footer>
+
+    <!-- Property Details Modal -->
+    <div class="modal fade" id="propertyModal" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div id="propertyDetails" class="modal-body p-0"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div class="modal fade" id="shareModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header share-modal-header">
+                    <h5 class="modal-title"><i class="bi bi-share"></i> مشاركة العقار</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body share-modal-body">
+                    <p class="text-center mb-4">اختر طريقة المشاركة</p>
+                    <div class="share-options">
+                        <div class="share-option" onclick="shareTo('whatsapp')"><i
+                                class="bi bi-whatsapp text-success"></i><span>واتساب</span></div>
+                        <div class="share-option" onclick="shareTo('facebook')"><i
+                                class="bi bi-facebook text-primary"></i><span>فيسبوك</span></div>
+                        <div class="share-option" onclick="shareTo('twitter')"><i
+                                class="bi bi-twitter-x"></i><span>تويتر / X</span></div>
+                        <div class="share-option" onclick="shareTo('telegram')"><i
+                                class="bi bi-telegram text-info"></i><span>تيليجرام</span></div>
+                        <div class="share-option" onclick="shareTo('instagram')"><i
+                                class="bi bi-instagram text-danger"></i><span>انستجرام</span></div>
+                        <div class="share-option" onclick="shareTo('email')"><i
+                                class="bi bi-envelope text-warning"></i><span>إيميل</span></div>
+                        <div class="share-option" onclick="shareTo('copy')"><i
+                                class="bi bi-link-45deg text-secondary"></i><span>نسخ الرابط</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // ========== JavaScript (Preserved functionality) ==========
+        let allProperties = [];
+        let currentPurpose = "all";
+        let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+        let currentSharePropertyId = null;
+
+        const propertiesGrid = document.getElementById("propertiesGrid");
+        const noResults = document.getElementById("noResults");
+        const searchType = document.getElementById("searchType");
+        const searchArea = document.getElementById("searchArea");
+        const searchPrice = document.getElementById("searchPrice");
+        const searchRooms = document.getElementById("searchRooms");
+        const searchBtn = document.getElementById("searchBtn");
+        const contactAreaSelect = document.getElementById("contactArea");
+        const defaultAreas = ['سموحة', 'كفر عبده', 'ستانلي', 'سيدي بشر', 'العصافرة', 'المنتزه', 'ميامي', 'المعمورة'];
+
+        // Mobile menu
+        const menuToggle = document.getElementById("menuToggle");
+        const mobileMenu = document.getElementById("mobileMenu");
+        const closeMenu = document.getElementById("closeMenu");
+
+        menuToggle.addEventListener("click", () => {
+            mobileMenu.classList.add("open");
+        });
+        closeMenu.addEventListener("click", () => {
+            mobileMenu.classList.remove("open");
+        });
+
+        // Load properties
+        async function loadProperties() {
+            try {
+                const response = await fetch('/api/properties');
+                const data = await response.json();
+                allProperties = data;
+                updateAreaFilter(allProperties);
+                document.getElementById('stat-props-total').textContent = allProperties.length;
+                document.getElementById('hero-props-count').textContent = allProperties.length;
+                renderProperties(allProperties);
+                handlePropertyHash();
+            } catch (error) {
+                console.error(error);
+                updateContactAreaFallback();
+                noResults.classList.remove('d-none');
+                noResults.querySelector('h4').innerText = 'تعذر الاتصال بالخادم. تأكد من تشغيل السيرفر.';
+            }
+        }
+
+        function updateAreaFilter(properties) {
+            const areaSelect = document.getElementById("searchArea");
+            const areas = [...new Set(properties.map(p => (p.location || "").trim()).filter(Boolean))];
+            const allAreas = areas.length > 0 ? areas : defaultAreas;
+            areaSelect.innerHTML = '<option value="all">كل المناطق</option>';
+            allAreas.forEach(area => {
+                const option = document.createElement("option");
+                option.value = area;
+                option.textContent = area;
+                areaSelect.appendChild(option);
+            });
+            updateContactAreaFallback(allAreas);
+        }
+
+        function updateContactAreaFallback(areas = defaultAreas) {
+            if (!contactAreaSelect) return;
+            contactAreaSelect.innerHTML = '<option value="">اختر المنطقة</option>';
+            areas.forEach(area => {
+                const option = document.createElement("option");
+                option.value = area;
+                option.textContent = area;
+                contactAreaSelect.appendChild(option);
+            });
+        }
+
+        function renderProperties(list) {
+            propertiesGrid.innerHTML = "";
+            if (list.length === 0) {
+                noResults.classList.remove("d-none");
+                return;
+            }
+            noResults.classList.add("d-none");
+            list.forEach((property) => {
+                const isFavorite = favorites.includes(property.id);
+                const badgeClass = property.purpose === "sale" ? "" : "badge-rent";
+                const badgeText = property.purpose === "sale" ? "للبيع" : "للإيجار";
+                let coverImg = property.image_path || (property.images && property.images.length > 0 ? property.images[0].image_path : 'https://via.placeholder.com/600x400?text=No+Image');
+                if (!coverImg.startsWith('http') && !coverImg.startsWith('/')) coverImg = '/' + coverImg;
+
+                let statusText = "متاح";
+                let statusClass = "status-available";
+                switch (property.status) {
+                    case "unavailable":
+                        statusText = "غير متاح";
+                        statusClass = "status-unavailable";
+                        break;
+                    case "sold":
+                        statusText = "تم البيع";
+                        statusClass = "status-sold";
+                        break;
+                    case "rented":
+                        statusText = "تم الايجار";
+                        statusClass = "status-rented";
+                        break;
+                }
+
+                const card = document.createElement("div");
+                card.className = "property-card";
+                card.innerHTML = `
+                    <div class="property-image">
+                        <img src="${coverImg}" alt="${property.title}" loading="lazy">
+                        <span class="property-badge ${badgeClass}">${badgeText}</span>
+                        <span class="status-badge ${statusClass}">${statusText}</span>
+                        <button class="favorite-btn ${isFavorite ? "active" : ""}" onclick="toggleFavorite(${property.id})">
+                            <i class="bi ${isFavorite ? "bi-heart-fill" : "bi-heart"}"></i>
+                        </button>
+                        <div class="property-price">${new Intl.NumberFormat('en-US').format(property.price)} جنيه${property.purpose === 'rent' ? ' / شهر' : ''}</div>
+                    </div>
+                    <div class="property-body">
+                        <div class="property-type">${property.type || 'عقار'}</div>
+                        <h3 class="property-title">${property.title}</h3>
+                        <div class="property-location"><i class="bi bi-geo-alt-fill"></i> ${property.location || 'الإسكندرية'}</div>
+                        <div class="property-features">
+                            <span><i class="bi bi-door-open"></i> ${property.bedrooms || 0}</span>
+                            <span><i class="bi bi-droplet"></i> ${property.bathrooms || 0}</span>
+                            <span><i class="bi bi-aspect-ratio"></i> ${property.area || 0} م²</span>
+                        </div>
+                        <div class="property-actions">
+                            <button class="btn-view" onclick="showProperty(${property.id})">التفاصيل</button>
+                            <button class="btn-share" onclick="openShareModal(${property.id})" title="مشاركة"><i class="bi bi-share"></i></button>
+                            <a href="https://wa.me/201140093481?text=${encodeURIComponent('مرحباً، أريد الاستفسار عن ' + property.title)}" target="_blank" class="btn-wa"><i class="bi bi-whatsapp"></i></a>
+                        </div>
+                    </div>
+                `;
+                propertiesGrid.appendChild(card);
+            });
+        }
+
+        // ========== Share Functions ==========
+        function openShareModal(id) {
+            currentSharePropertyId = id;
+            const shareModal = new bootstrap.Modal(document.getElementById('shareModal'));
+            shareModal.show();
+        }
+
+        function getShareUrl() {
+            const property = allProperties.find(p => p.id === currentSharePropertyId);
+            if (!property) return '';
+            return `${window.location.origin}${window.location.pathname}#property-${property.id}`;
+        }
+
+        function getShareText() {
+            const property = allProperties.find(p => p.id === currentSharePropertyId);
+            if (!property) return '';
+            return `اكتشف هذا العقار: ${property.title} - ${property.location || ''}`;
+        }
+
+        function shareTo(platform) {
+            const url = getShareUrl();
+            const text = getShareText();
+            const encodedUrl = encodeURIComponent(url);
+            const encodedText = encodeURIComponent(text);
+            let shareUrl = '';
+
+            switch (platform) {
+                case 'whatsapp':
+                    shareUrl = `https://api.whatsapp.com/send?text=${encodedText}%20${encodedUrl}`;
+                    break;
+                case 'facebook':
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`;
+                    break;
+                case 'twitter':
+                    shareUrl = `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`;
+                    break;
+                case 'telegram':
+                    shareUrl = `https://t.me/share/url?url=${encodedUrl}&text=${encodedText}`;
+                    break;
+                case 'email':
+                    shareUrl = `mailto:?subject=${encodeURIComponent('عقار للبيع/إيجار')}&body=${encodedText}%20${encodedUrl}`;
+                    break;
+                case 'instagram':
+                    copyToClipboard(url);
+                    window.open('https://www.instagram.com/', '_blank');
+                    return;
+                case 'copy':
+                default:
+                    copyToClipboard(url);
+                    return;
+            }
+
+            window.open(shareUrl, '_blank');
+            bootstrap.Modal.getInstance(document.getElementById('shareModal'))?.hide();
+        }
+
+        function copyToClipboard(text) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('تم نسخ رابط العقار!');
+                }).catch(() => fallbackCopy(text));
+            } else {
+                fallbackCopy(text);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            alert('تم نسخ رابط العقار!');
+        }
+
+        // Handle property hash on page load
+        function handlePropertyHash() {
+            const hash = window.location.hash;
+            if (hash.startsWith('#property-')) {
+                const id = parseInt(hash.split('-')[1]);
+                if (id) {
+                    setTimeout(() => showProperty(id), 500);
+                }
+            }
+        }
+
+        // Filter functions (with optional scroll control)
+        function filterProperties(shouldScroll = true) {
+            const type = searchType.value;
+            const area = searchArea.value;
+            const maxPrice = Number(searchPrice.value);
+            const rooms = searchRooms.value;
+
+            const filtered = allProperties.filter(p => {
+                const purposeMatch = currentPurpose === "all" || p.purpose === currentPurpose;
+                const typeMatch = type === "all" || p.type === type;
+                const areaMatch = area === "all" || p.location === area;
+                const priceMatch = !maxPrice || p.price <= maxPrice;
+                const roomsMatch = rooms === "all" || (p.bedrooms || 0) >= Number(rooms);
+                return purposeMatch && typeMatch && areaMatch && priceMatch && roomsMatch;
+            });
+
+            renderProperties(filtered);
+            if (shouldScroll) {
+                document.getElementById("properties").scrollIntoView({ behavior: "smooth" });
+            }
+        }
+
+        searchBtn.addEventListener("click", function () {
+            const original = this.innerHTML;
+            this.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> جاري البحث...';
+            this.disabled = true;
+            setTimeout(() => {
+                filterProperties();
+                this.innerHTML = original;
+                this.disabled = false;
+            }, 500);
+        });
+
+        searchType.addEventListener('change', filterProperties);
+        searchArea.addEventListener('change', filterProperties);
+        searchPrice.addEventListener('input', filterProperties);
+        searchRooms.addEventListener('change', filterProperties);
+
+        document.querySelectorAll(".search-tab").forEach(tab => {
+            tab.addEventListener("click", function () {
+                document.querySelectorAll(".search-tab").forEach(item => item.classList.remove("active"));
+                this.classList.add("active");
+                currentPurpose = this.dataset.purpose;
+                filterProperties();
+            });
+        });
+
+        function filterByArea(area) {
+            searchArea.value = area;
+            currentPurpose = "all";
+            document.querySelectorAll(".search-tab").forEach(t => t.classList.remove("active"));
+            document.querySelector('.search-tab[data-purpose="all"]').classList.add("active");
+            filterProperties(false);
+        }
+
+        function resetFilters() {
+            currentPurpose = "all";
+            searchType.value = "all";
+            searchArea.value = "all";
+            searchPrice.value = "";
+            searchRooms.value = "all";
+            document.querySelectorAll(".search-tab").forEach(t => t.classList.remove("active"));
+            document.querySelector('.search-tab[data-purpose="all"]').classList.add("active");
+            renderProperties(allProperties);
+        }
+
+        function toggleFavorite(id) {
+            if (favorites.includes(id)) favorites = favorites.filter(f => f !== id);
+            else favorites.push(id);
+            localStorage.setItem("favorites", JSON.stringify(favorites));
+            renderProperties(getCurrentFilteredProperties());
+        }
+
+        function getCurrentFilteredProperties() {
+            const type = searchType.value;
+            const area = searchArea.value;
+            const maxPrice = Number(searchPrice.value);
+            const rooms = searchRooms.value;
+            return allProperties.filter(p => {
+                const purposeMatch = currentPurpose === "all" || p.purpose === currentPurpose;
+                const typeMatch = type === "all" || p.type === type;
+                const areaMatch = area === "all" || p.location === area;
+                const priceMatch = !maxPrice || p.price <= maxPrice;
+                const roomsMatch = rooms === "all" || (p.bedrooms || 0) >= Number(rooms);
+                return purposeMatch && typeMatch && areaMatch && priceMatch && roomsMatch;
+            });
+        }
+
+        // Show property details
+        async function showProperty(id) {
+            try {
+                const resProp = await fetch(`/api/properties/${id}`);
+                const property = await resProp.json();
+                if (!property) return;
+                const resImgs = await fetch(`/api/properties/${id}/images`);
+                const imagesData = await resImgs.json();
+                const images = imagesData && imagesData.length > 0 ? imagesData.map(img => img.image_path) : ['https://via.placeholder.com/600x400?text=No+Image'];
+
+                const details = document.getElementById("propertyDetails");
+                details.innerHTML = `
+                    <div class="row g-0">
+                        <div class="col-lg-6">
+                            <div id="carousel-${property.id}" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    ${images.map((img, idx) => `<div class="carousel-item ${idx === 0 ? 'active' : ''}"><img src="${img}" class="modal-property-img d-block w-100" alt="${property.title}"></div>`).join('')}
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#carousel-${property.id}" data-bs-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span></button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#carousel-${property.id}" data-bs-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span></button>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="modal-info-panel">
+                                <span class="badge ${property.purpose === "sale" ? "bg-primary" : "bg-success"} mb-3">${property.purpose === 'sale' ? 'للبيع' : 'للإيجار'}</span>
+                                <h2>${property.title}</h2>
+                                <div class="detail-price mt-3">${new Intl.NumberFormat('en-US').format(property.price)} جنيه${property.purpose === 'rent' ? ' / شهر' : ''}</div>
+                                <div class="text-muted mb-4"><i class="bi bi-geo-alt-fill me-1"></i> ${property.location || 'الإسكندرية'}</div>
+                                <div class="row g-2 mb-4">
+                                    <div class="col-4"><div class="detail-feature"><i class="bi bi-door-open"></i><span>${property.bedrooms || 0} غرف</span></div></div>
+                                    <div class="col-4"><div class="detail-feature"><i class="bi bi-droplet"></i><span>${property.bathrooms || 0} حمام</span></div></div>
+                                    <div class="col-4"><div class="detail-feature"><i class="bi bi-aspect-ratio"></i><span>${property.area || 0} م²</span></div></div>
+                                </div>
+                                <h5 class="fw-bold">تفاصيل العقار</h5>
+                                <p class="text-muted lh-lg">${property.description || 'لا يوجد وصف متاح'}</p>
+                                <div class="border-top pt-3 mt-3">
+                                    <p class="mb-1"><strong>النوع:</strong> ${property.type || 'غير محدد'}</p>
+                                    <p class="mb-1"><strong>الدور:</strong> ${property.floor || 'غير محدد'}</p>
+                                    <p class="mb-0"><strong>الحالة:</strong> ${property.status === 'available' ? 'متاح' : property.status === 'unavailable' ? 'غير متاح' : property.status === 'sold' ? 'تم البيع' : property.status === 'rented' ? 'تم الايجار' : property.status}</p>
+                                </div>
+                                ${property.facebook ? `
+                                <div class="mt-3">
+                                    <a href="${property.facebook}" target="_blank" class="btn btn-outline-primary btn-sm me-2">
+                                        <i class="bi bi-facebook"></i> فيسبوك
+                                    </a>
+                                </div>` : ''}
+                                ${property.youtube ? `
+                                <div class="mt-3">
+                                    <a href="${property.youtube}" target="_blank" class="btn btn-outline-danger btn-sm me-2">
+                                        <i class="bi bi-youtube"></i> يوتيوب
+                                    </a>
+                                </div>` : ''}
+                                <div class="d-flex gap-2 mt-4 flex-wrap">
+                                    <a href="tel:+201140093481" class="btn btn-primary flex-grow-1 rounded-pill"><i class="bi bi-telephone"></i> اتصل بنا</a>
+                                    <a href="https://wa.me/201140093481?text=${encodeURIComponent('مرحباً، أريد الاستفسار عن ' + property.title)}" target="_blank" class="btn btn-success flex-grow-1 rounded-pill"><i class="bi bi-whatsapp"></i> واتساب</a>
+                                    <button class="btn btn-secondary" onclick="openShareModal(${property.id})"><i class="bi bi-share"></i> مشاركة</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                const modal = new bootstrap.Modal(document.getElementById("propertyModal"));
+                modal.show();
+            } catch (error) {
+                console.error(error);
+                alert('حدث خطأ');
+            }
+        }
+
+        // Load contact areas with fallback
+        async function loadContactAreas() {
+            try {
+                const response = await fetch('/api/properties');
+                const properties = await response.json();
+                const areas = [...new Set(properties.map(p => p.location).filter(location => location && location.trim() !== ''))];
+                const finalAreas = areas.length > 0 ? areas : defaultAreas;
+                if (!contactAreaSelect) return;
+                contactAreaSelect.innerHTML = '<option value="">اختر المنطقة</option>';
+                finalAreas.forEach(area => {
+                    const option = document.createElement('option');
+                    option.value = area;
+                    option.textContent = area;
+                    contactAreaSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('خطأ في تحميل المناطق:', error);
+                if (contactAreaSelect) {
+                    contactAreaSelect.innerHTML = '<option value="">اختر المنطقة</option>';
+                    defaultAreas.forEach(area => {
+                        const option = document.createElement('option');
+                        option.value = area;
+                        option.textContent = area;
+                        contactAreaSelect.appendChild(option);
+                    });
+                }
+            }
+        }
+
+        // Contact form submission
+        document.getElementById("contactForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            const name = this.querySelector('input[placeholder="اسمك"]').value;
+            const phone = this.querySelector('input[placeholder="01xxxxxxxxx"]').value;
+            const requestType = this.querySelector('select:first-of-type').value;
+            const area = document.getElementById('contactArea').value;
+            const message = this.querySelector('textarea').value;
+            const whatsappMessage = `مرحباً، أنا ${name} وأريد التواصل بخصوص العقارات.\n\n📞 رقم الهاتف: ${phone}\n📋 نوع الطلب: ${requestType}\n📍 المنطقة: ${area}\n\n💬 الرسالة: ${message}\n\nيرجى الرد في أقرب وقت. شكراً!`;
+            const encodedMessage = encodeURIComponent(whatsappMessage);
+            window.open(`https://wa.me/201140093481?text=${encodedMessage}`, '_blank');
+            const btn = this.querySelector('button[type="submit"]');
+            const orig = btn.innerHTML;
+            btn.innerHTML = '<i class="bi bi-check-circle"></i> تم الإرسال!';
+            btn.disabled = true;
+            btn.classList.add('btn-success');
+            setTimeout(() => {
+                btn.innerHTML = orig;
+                btn.disabled = false;
+                btn.classList.remove('btn-success');
+            }, 5000);
+            this.reset();
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProperties();
+            loadContactAreas();
+        });
+
+        // Listen for hash changes to load property
+        window.addEventListener('hashchange', handlePropertyHash);
+    </script>
+</body>
+
+</html>
