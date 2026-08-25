@@ -394,6 +394,8 @@ app.get("/", (req, res) => {
 });
 
 // ===== Start Server =====
+app.use("/img", express.static("public/img"));
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
+app.get("/healthz", (req, res) => res.send("OK"));
