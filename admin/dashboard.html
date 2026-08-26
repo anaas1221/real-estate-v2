@@ -87,6 +87,29 @@
             color: var(--accent-light);
         }
 
+        /* زر الإغلاق */
+        .sidebar-close {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #fff;
+            font-size: 1.3rem;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background .2s;
+        }
+
+        .sidebar-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
         .sidebar-menu {
             list-style: none;
             padding: 0;
@@ -508,7 +531,13 @@
 
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
+        <!-- زر الإغلاق -->
+        <button class="sidebar-close" onclick="toggleSidebar()" title="إغلاق القائمة">
+            <i class="bi bi-x-lg"></i>
+        </button>
+
         <div class="sidebar-logo">
+            <!-- غيّر src إلى الصورة التي تريدها -->
             <img src="/img/logo 2.jpeg" alt="logo">
             <div class="logo-text">Test <br><span>For You</span></div>
         </div>
