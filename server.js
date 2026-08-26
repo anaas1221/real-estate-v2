@@ -20,10 +20,19 @@ cloudinary.config({
     process.env.CLOUDINARY_API_SECRET || "GyGi8o8WlZNJS4uJduXxsvhC2l4",
 });
 
-// ========== PostgreSQL Connection (Aiven) ==========
+// ========== PostgreSQL Connection (Aiven) - with SSL disabled verification ==========
+const connectionString = process.env.DATABASE_URL;
+// إزالة sslmode من الرابط إذا كانت موجودة لتجنب مشكلة الشهادة
+const cleanConnectionString = connectionString.replace(
+  /[?&]sslmode=[^&]*/g,
+  "",
+);
+
 const db = new Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }, // يمكن تحسينها لاحقًا بشهادة CA
+  connectionString: cleanConnectionString,
+  ssl: {
+    rejectUnauthorized: false, // هذا يتجاوز مشكلة الشهادة الذاتية
+  },
 });
 
 db.connect()
