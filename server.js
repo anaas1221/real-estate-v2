@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || "development_secret";
 
 // ========== SQLite Connection ==========
-const db = new sqlite3.Database("./database.db", (err) => {
+const db = new sqlite3.Database("/tmp/database.db", (err) => {
   if (err) {
     console.error("❌ خطأ في فتح قاعدة البيانات:", err.message);
     process.exit(1);
@@ -387,15 +387,17 @@ app.delete("/api/admin/properties/:id", verifyToken, (req, res) => {
     },
   );
 });
-
 // ===== Home Redirect =====
 app.get("/", (req, res) => {
   res.redirect("/public/index.html");
 });
 
-// ===== Start Server =====
 app.use("/img", express.static("public/img"));
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-});
+
+// Health check for Render
 app.get("/healthz", (req, res) => res.send("OK"));
+
+// ===== Start Server =====
+app.listen(process.env.PORT, "0.0.0.0", () => {
+  console.log(`🚀 Server running on port ${process.env.PORT}`);
+});
