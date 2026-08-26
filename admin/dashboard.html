@@ -43,7 +43,7 @@
             margin: 0;
         }
 
-        /* Sidebar */
+        /* ========== Sidebar ========== */
         .sidebar {
             position: fixed;
             right: 0;
@@ -54,10 +54,30 @@
             color: #fff;
             padding: 25px 20px;
             z-index: 1000;
-            transition: transform .4s ease;
+            transition: right .4s ease;
             box-shadow: var(--shadow-lg);
             display: flex;
             flex-direction: column;
+        }
+
+        /* على الشاشات الكبيرة، القائمة ظاهرة دائمًا */
+        @media (min-width: 992px) {
+            .sidebar {
+                right: 0;
+            }
+        }
+
+        /* على الموبايل، القائمة مخفية افتراضيًا */
+        @media (max-width: 991px) {
+            .sidebar {
+                right: -var(--sidebar-width);
+                /* إخفاء خارج الشاشة */
+            }
+
+            .sidebar.open {
+                right: 0;
+                /* إظهار عند فتح القائمة */
+            }
         }
 
         .sidebar-logo {
@@ -87,36 +107,34 @@
             color: var(--accent-light);
         }
 
-        /* زر الإغلاق - مخفي افتراضيًا */
+        /* زر الإغلاق (X) - أبيض */
         .sidebar-close {
             position: absolute;
             top: 20px;
             right: 20px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
             border: none;
             color: #fff;
-            font-size: 1.3rem;
-            width: 35px;
-            height: 35px;
+            font-size: 1.5rem;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: background .2s;
-            display: none;
-            /* إخفاء افتراضيًا */
-        }
-
-        /* إظهار زر الإغلاق فقط على الموبايل عندما تكون القائمة مفتوحة */
-        @media (max-width: 991px) {
-            .sidebar.open .sidebar-close {
-                display: flex !important;
-            }
+            transition: background .2s, transform .2s;
+            z-index: 1100;
         }
 
         .sidebar-close:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        /* إخفاء زر الإغلاق افتراضيًا */
+        .sidebar-close {
+            display: none;
         }
 
         /* إظهار زر الإغلاق فقط على الموبايل عندما تكون القائمة مفتوحة */
@@ -183,12 +201,19 @@
             color: var(--danger);
         }
 
-        /* Main Content */
+        /* ========== Main Content ========== */
         .main-content {
             margin-right: var(--sidebar-width);
             padding: 30px;
             min-height: 100vh;
             transition: margin-right .4s ease;
+        }
+
+        /* على الموبايل، المحتوى ياخد كامل الشاشة */
+        @media (max-width: 991px) {
+            .main-content {
+                margin-right: 0;
+            }
         }
 
         .main-header {
@@ -224,17 +249,27 @@
             color: var(--text-dark);
         }
 
-        .main-header .btn-toggle {
+        /* زر القائمة (3 شرط) - يظهر فقط على الموبايل */
+        .btn-toggle {
             display: none;
             background: var(--bg-light);
             border: 0;
             border-radius: 10px;
             padding: 8px 12px;
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             cursor: pointer;
+            color: var(--primary);
         }
 
-        /* Stat Cards */
+        @media (max-width: 991px) {
+            .btn-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        /* ========== Stats Cards ========== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -284,7 +319,7 @@
             font-weight: 600;
         }
 
-        /* Table Card */
+        /* ========== Table Card ========== */
         .table-card {
             background: var(--surface);
             border-radius: var(--radius-lg);
@@ -459,7 +494,7 @@
             color: #fff;
         }
 
-        /* Modal */
+        /* ========== Modal ========== */
         .modal-content {
             border-radius: var(--radius-lg);
             border: 0;
@@ -521,25 +556,6 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(201, 162, 39, .3);
         }
-
-        /* Mobile */
-        @media (max-width: 991px) {
-            .sidebar {
-                right: -var(--sidebar-width);
-            }
-
-            .sidebar.open {
-                right: 0;
-            }
-
-            .main-content {
-                margin-right: 0;
-            }
-
-            .main-header .btn-toggle {
-                display: block;
-            }
-        }
     </style>
 </head>
 
@@ -547,13 +563,12 @@
 
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
-        <!-- زر الإغلاق - يظهر فقط على الموبايل عندما تكون القائمة مفتوحة -->
+        <!-- زر الإغلاق (X) - يظهر فقط عندما تكون القائمة مفتوحة على الموبايل -->
         <button class="sidebar-close" onclick="toggleSidebar()" title="إغلاق القائمة">
             <i class="bi bi-x-lg"></i>
         </button>
 
         <div class="sidebar-logo">
-            <!-- غيّر src إلى الصورة التي تريدها -->
             <img src="/img/logo 2.jpeg" alt="logo">
             <div class="logo-text">Test <br><span>For You</span></div>
         </div>
@@ -570,7 +585,10 @@
     <div class="main-content">
         <div class="main-header">
             <div style="display:flex; align-items:center; gap:15px;">
-                <button class="btn-toggle" onclick="toggleSidebar()"><i class="bi bi-list"></i></button>
+                <!-- زر الـ 3 شرط (Hamburger) - يظهر فقط على الموبايل -->
+                <button class="btn-toggle" onclick="toggleSidebar()">
+                    <i class="bi bi-list"></i>
+                </button>
                 <h4><i class="bi bi-speedometer2"></i> لوحة التحكم</h4>
             </div>
             <div class="admin-info">
