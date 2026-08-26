@@ -23,7 +23,7 @@ const db = new sqlite3.Database("/tmp/database.db", (err) => {
 // ========== Multer Storage (Local) ==========
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadDir = path.join(__dirname, "uploads");
+    const uploadDir = path.join("/tmp", "uploads");
     if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
     cb(null, uploadDir);
   },
@@ -41,7 +41,7 @@ const upload = multer({
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/uploads", express.static("uploads"));
+app.use("/uploads", express.static("/tmp/uploads"));
 app.use("/public", express.static("public"));
 app.use("/admin", express.static(path.join(__dirname, "admin")));
 
