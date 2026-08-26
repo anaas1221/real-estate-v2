@@ -92,7 +92,6 @@
             position: absolute;
             top: 20px;
             right: 20px;
-            /* من left إلى right */
             background: rgba(255, 255, 255, 0.1);
             border: none;
             color: #fff;
@@ -107,6 +106,13 @@
             transition: background .2s;
             display: none;
             /* إخفاء افتراضيًا */
+        }
+
+        /* إظهار زر الإغلاق فقط على الموبايل عندما تكون القائمة مفتوحة */
+        @media (max-width: 991px) {
+            .sidebar.open .sidebar-close {
+                display: flex !important;
+            }
         }
 
         .sidebar-close:hover {
