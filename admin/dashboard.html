@@ -70,7 +70,7 @@
         /* على الموبايل، القائمة مخفية افتراضيًا */
         @media (max-width: 991px) {
             .sidebar {
-                right: -var(--sidebar-width);
+                right: calc(-1 * var(--sidebar-width));
                 /* إخفاء خارج الشاشة */
             }
 
@@ -79,6 +79,7 @@
                 /* إظهار عند فتح القائمة */
             }
         }
+
 
         .sidebar-logo {
             display: flex;
