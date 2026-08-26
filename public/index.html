@@ -199,15 +199,23 @@
 
         /* ================== Hero ================== */
         .hero {
-            color: var(--text-dark);
+            color: #fff;
             padding: 80px 0 100px;
             position: relative;
-            background-image: url('img/header.png');
+
+            background-image:
+                linear-gradient(rgba(0, 35, 60, 0.45), rgba(0, 35, 60, 0.55)),
+                url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1920&q=85');
+
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center;
+
             width: 100%;
             min-height: 100vh;
+
+            display: flex;
+            align-items: center;
         }
 
         .hero::after {
@@ -977,7 +985,7 @@
     <header class="header">
         <div class="container">
             <a href="#home" class="logo">
-                <img src="img/logo 2.jpeg" alt="logo">
+                <img src="img/.jpeg" alt="logo">
                 <span class="logo-text"><span>Test</span> Fot You </span>
             </a>
             <ul class="nav-links">
