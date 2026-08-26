@@ -87,7 +87,7 @@
             color: var(--accent-light);
         }
 
-        /* زر الإغلاق */
+        /* زر الإغلاق - مخفي افتراضيًا */
         .sidebar-close {
             position: absolute;
             top: 20px;
@@ -104,10 +104,18 @@
             justify-content: center;
             cursor: pointer;
             transition: background .2s;
+            display: none; /* إخفاء افتراضيًا */
         }
 
         .sidebar-close:hover {
             background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* إظهار زر الإغلاق فقط على الموبايل عندما تكون القائمة مفتوحة */
+        @media (max-width: 991px) {
+            .sidebar.open .sidebar-close {
+                display: flex;
+            }
         }
 
         .sidebar-menu {
@@ -531,7 +539,7 @@
 
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
-        <!-- زر الإغلاق -->
+        <!-- زر الإغلاق - يظهر فقط على الموبايل عندما تكون القائمة مفتوحة -->
         <button class="sidebar-close" onclick="toggleSidebar()" title="إغلاق القائمة">
             <i class="bi bi-x-lg"></i>
         </button>
