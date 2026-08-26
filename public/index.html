@@ -1354,8 +1354,7 @@
                 const data = await response.json();
                 allProperties = data;
                 updateAreaFilter(allProperties);
-                document.getElementById('stat-props-total').textContent = allProperties.length;
-                document.getElementById('hero-props-count').textContent = allProperties.length;
+                // إزالة السطور التي تسبب الخطأ
                 renderProperties(allProperties);
                 handlePropertyHash();
             } catch (error) {
