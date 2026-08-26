@@ -123,11 +123,9 @@ initDb();
 
 // ===== Public Routes =====
 app.get("/api/properties", (req, res) => {
+  // استعلام مبسط يرجع كل العقارات حتى بدون صور
   db.all(
-    `SELECT p.*, pi.image_path
-     FROM properties p
-     LEFT JOIN property_images pi ON p.id = pi.property_id AND pi.is_cover = 1
-     ORDER BY p.sort_order ASC`,
+    "SELECT * FROM properties ORDER BY sort_order ASC",
     [],
     (err, rows) => {
       if (err) return res.status(500).json({ error: "Database error" });
@@ -411,7 +409,6 @@ app.delete("/api/admin/properties/:id", verifyToken, (req, res) => {
       if (images) {
         // Delete each image from Cloudinary
         images.forEach((img) => {
-          // Extract public_id from the secure_url
           const parts = img.image_path.split("/");
           const fileName = parts[parts.length - 1]; // e.g., "abc.jpg"
           const publicId = `real_estate/${fileName.split(".")[0]}`; // remove extension
