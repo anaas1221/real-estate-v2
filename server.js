@@ -123,13 +123,20 @@ initDb();
 
 // ===== Public Routes =====
 app.get("/api/properties", (req, res) => {
-  // استعلام مبسط يرجع كل العقارات حتى بدون صور
   db.all(
-    "SELECT * FROM properties ORDER BY sort_order ASC",
+    `SELECT p.*, pi.image_path
+     FROM properties p
+     LEFT JOIN property_images pi ON p.id = pi.property_id AND pi.is_cover = 1
+     ORDER BY p.sort_order ASC`,
     [],
     (err, rows) => {
       if (err) return res.status(500).json({ error: "Database error" });
-      res.json(rows);
+      // Map to ensure image_path exists as null if no cover image
+      const result = rows.map((row) => ({
+        ...row,
+        image_path: row.image_path || null,
+      }));
+      res.json(result);
     },
   );
 });
