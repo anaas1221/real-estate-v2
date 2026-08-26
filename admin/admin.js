@@ -81,7 +81,7 @@ window.editProp = async function (id) {
 
   document.getElementById("propId").value = p.id;
   document.getElementById("f_title").value = p.title;
-  document.getElementById("f_code").value = p.code || ""; // إضافة
+  document.getElementById("f_code").value = p.code || "";
   document.getElementById("f_price").value = p.price;
   document.getElementById("f_type").value = p.type;
   document.getElementById("f_purpose").value = p.purpose;
@@ -128,7 +128,7 @@ window.deleteProp = async function (id) {
 window.saveProperty = async function () {
   const id = document.getElementById("propId").value;
   const title = document.getElementById("f_title").value;
-  const code = document.getElementById("f_code").value; // إضافة
+  const code = document.getElementById("f_code").value;
   const price = document.getElementById("f_price").value;
   const type = document.getElementById("f_type").value;
   const purpose = document.getElementById("f_purpose").value;
@@ -159,7 +159,7 @@ window.saveProperty = async function () {
   try {
     const formData = new FormData();
     formData.append("title", title);
-    formData.append("code", code || ""); // إضافة
+    formData.append("code", code || "");
     formData.append("price", price);
     formData.append("type", type);
     formData.append("purpose", purpose);
@@ -334,8 +334,8 @@ document.getElementById("searchInput").addEventListener("keyup", function () {
       (p) =>
         p.title.toLowerCase().includes(val) ||
         (p.location && p.location.toLowerCase().includes(val)) ||
-        (p.code && p.code.toLowerCase().includes(codeVal)),
-    ),
+        (p.code && p.code.toLowerCase().includes(codeVal))
+    )
   );
 });
 
@@ -347,8 +347,8 @@ document.getElementById("searchCode").addEventListener("keyup", function () {
       (p) =>
         p.title.toLowerCase().includes(titleVal) ||
         (p.location && p.location.toLowerCase().includes(titleVal)) ||
-        (p.code && p.code.toLowerCase().includes(val)),
-    ),
+        (p.code && p.code.toLowerCase().includes(val))
+    )
   );
 });
 

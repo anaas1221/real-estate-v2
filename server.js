@@ -16,22 +16,18 @@ const JWT_SECRET = process.env.JWT_SECRET || "development_secret";
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME || "d4lm9ymz",
   api_key: process.env.CLOUDINARY_API_KEY || "619481453611176",
-  api_secret:
-    process.env.CLOUDINARY_API_SECRET || "GyGi8o8WlZNJS4uJduXxsvhC2l4",
+  api_secret: process.env.CLOUDINARY_API_SECRET || "GyGi8o8WlZNJS4uJduXxsvhC2l4",
 });
 
-// ========== PostgreSQL Connection (Aiven) - with SSL disabled verification ==========
+// ========== PostgreSQL Connection (Aiven) ==========
 const connectionString = process.env.DATABASE_URL;
-const cleanConnectionString = connectionString.replace(
-  /[?&]sslmode=[^&]*/g,
-  "",
-);
+const cleanConnectionString = connectionString.replace(/[?&]sslmode=[^&]*/g, "");
 
 const db = new Client({
   connectionString: cleanConnectionString,
   ssl: {
-    rejectUnauthorized: false, // يتجاوز مشكلة الشهادة الذاتية
-  },
+    rejectUnauthorized: false
+  }
 });
 
 db.connect()
@@ -45,7 +41,7 @@ db.connect()
 const storage = multer.memoryStorage();
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB per image
+  limits: { fileSize: 10 * 1024 * 1024 },
 }).array("images", 20);
 
 // ========== Middleware ==========
@@ -97,35 +93,25 @@ const initDb = async () => {
       FOREIGN KEY (property_id) REFERENCES properties(id) ON DELETE CASCADE
     );`);
 
-    // إضافة الأعمدة الجديدة إذا لم تكن موجودة (بما فيها code)
-    const columnsResult = await db.query(
-      "SELECT column_name FROM information_schema.columns WHERE table_name = 'properties'",
-    );
-    const columnNames = columnsResult.rows.map((r) => r.column_name);
+    const columnsResult = await db.query("SELECT column_name FROM information_schema.columns WHERE table_name = 'properties'");
+    const columnNames = columnsResult.rows.map(r => r.column_name);
     if (!columnNames.includes("facebook")) {
-      await db.query(
-        "ALTER TABLE properties ADD COLUMN facebook TEXT DEFAULT ''",
-      );
+      await db.query("ALTER TABLE properties ADD COLUMN facebook TEXT DEFAULT ''");
     }
     if (!columnNames.includes("youtube")) {
-      await db.query(
-        "ALTER TABLE properties ADD COLUMN youtube TEXT DEFAULT ''",
-      );
+      await db.query("ALTER TABLE properties ADD COLUMN youtube TEXT DEFAULT ''");
     }
     if (!columnNames.includes("code")) {
       await db.query("ALTER TABLE properties ADD COLUMN code TEXT DEFAULT ''");
     }
 
-    // إنشاء حساب المدير الافتراضي إذا لم يكن موجودًا
     const adminEmail = "admin@mahdy.com";
-    const result = await db.query("SELECT id FROM admins WHERE email = $1", [
-      adminEmail,
-    ]);
+    const result = await db.query("SELECT id FROM admins WHERE email = $1", [adminEmail]);
     if (result.rows.length === 0) {
       const hash = bcrypt.hashSync("123456", 10);
       await db.query(
         `INSERT INTO admins (name, email, password_hash) VALUES ($1, $2, $3)`,
-        ["مدير الموقع", adminEmail, hash],
+        ["مدير الموقع", adminEmail, hash]
       );
       console.log("✅ تم إنشاء حساب المدير تلقائياً!");
       console.log("📧 admin@mahdy.com");
@@ -142,19 +128,17 @@ const initDb = async () => {
 initDb();
 
 // ===== Public Routes =====
-
-// جلب كل العقارات مع صورة الغلاف
 app.get("/api/properties", async (req, res) => {
   try {
     const result = await db.query(
       `SELECT p.*, pi.image_path
        FROM properties p
        LEFT JOIN property_images pi ON p.id = pi.property_id AND pi.is_cover = 1
-       ORDER BY p.sort_order ASC`,
+       ORDER BY p.sort_order ASC`
     );
-    const rows = result.rows.map((row) => ({
+    const rows = result.rows.map(row => ({
       ...row,
-      image_path: row.image_path || null,
+      image_path: row.image_path || null
     }));
     res.json(rows);
   } catch (err) {
@@ -163,12 +147,9 @@ app.get("/api/properties", async (req, res) => {
   }
 });
 
-// جلب عقار واحد
 app.get("/api/properties/:id", async (req, res) => {
   try {
-    const result = await db.query("SELECT * FROM properties WHERE id = $1", [
-      req.params.id,
-    ]);
+    const result = await db.query("SELECT * FROM properties WHERE id = $1", [req.params.id]);
     res.json(result.rows[0] || null);
   } catch (err) {
     console.error(err);
@@ -176,12 +157,11 @@ app.get("/api/properties/:id", async (req, res) => {
   }
 });
 
-// جلب صور عقار معين
 app.get("/api/properties/:id/images", async (req, res) => {
   try {
     const result = await db.query(
       "SELECT * FROM property_images WHERE property_id = $1 ORDER BY sort_order ASC",
-      [req.params.id],
+      [req.params.id]
     );
     res.json(result.rows);
   } catch (err) {
@@ -194,9 +174,7 @@ app.get("/api/properties/:id/images", async (req, res) => {
 app.post("/api/admin/login", async (req, res) => {
   const { email, password } = req.body;
   try {
-    const result = await db.query("SELECT * FROM admins WHERE email = $1", [
-      email,
-    ]);
+    const result = await db.query("SELECT * FROM admins WHERE email = $1", [email]);
     const admin = result.rows[0];
     if (!admin) return res.status(401).json({ error: "بيانات غير صحيحة" });
     const match = bcrypt.compareSync(password, admin.password_hash);
@@ -225,15 +203,13 @@ const verifyToken = (req, res, next) => {
   });
 };
 
-// جلب بيانات المدير الحالي
 app.get("/api/admin/me", verifyToken, async (req, res) => {
   try {
     const result = await db.query(
       "SELECT id, name, email FROM admins WHERE id = $1",
-      [req.user.id],
+      [req.user.id]
     );
-    if (!result.rows[0])
-      return res.status(404).json({ error: "Admin not found" });
+    if (!result.rows[0]) return res.status(404).json({ error: "Admin not found" });
     res.json(result.rows[0]);
   } catch (err) {
     console.error(err);
@@ -241,12 +217,9 @@ app.get("/api/admin/me", verifyToken, async (req, res) => {
   }
 });
 
-// جلب كل العقارات (للإدارة)
 app.get("/api/admin/properties", verifyToken, async (req, res) => {
   try {
-    const result = await db.query(
-      "SELECT * FROM properties ORDER BY sort_order ASC",
-    );
+    const result = await db.query("SELECT * FROM properties ORDER BY sort_order ASC");
     res.json(result.rows);
   } catch (err) {
     console.error(err);
@@ -280,9 +253,7 @@ app.post("/api/admin/properties", verifyToken, (req, res) => {
     } = req.body;
 
     if (!title || !type || !purpose || !price || price <= 0) {
-      return res
-        .status(400)
-        .json({ error: "الرجاء إدخال العنوان، نوع العقار، الغرض، وسعر صحيح." });
+      return res.status(400).json({ error: "الرجاء إدخال العنوان، نوع العقار، الغرض، وسعر صحيح." });
     }
 
     try {
@@ -308,11 +279,10 @@ app.post("/api/admin/properties", verifyToken, (req, res) => {
           facebook,
           youtube,
           code,
-        ],
+        ]
       );
       const propId = insertResult.rows[0].id;
 
-      // رفع الصور إلى Cloudinary إذا وُجدت
       if (req.files && req.files.length > 0) {
         const uploadPromises = req.files.map((file, i) => {
           return new Promise((resolve, reject) => {
@@ -323,10 +293,10 @@ app.post("/api/admin/properties", verifyToken, (req, res) => {
                 const imagePath = result.secure_url;
                 await db.query(
                   "INSERT INTO property_images (property_id, image_path, is_cover, sort_order) VALUES ($1, $2, $3, $4)",
-                  [propId, imagePath, i === 0 ? 1 : 0, i],
+                  [propId, imagePath, i === 0 ? 1 : 0, i]
                 );
                 resolve();
-              },
+              }
             );
             uploadStream.end(file.buffer);
           });
@@ -369,9 +339,7 @@ app.put("/api/admin/properties/:id", verifyToken, (req, res) => {
     } = req.body;
 
     if (!title || !type || !purpose || !price || price <= 0) {
-      return res
-        .status(400)
-        .json({ error: "الرجاء إدخال العنوان، نوع العقار، الغرض، وسعر صحيح." });
+      return res.status(400).json({ error: "الرجاء إدخال العنوان، نوع العقار، الغرض، وسعر صحيح." });
     }
 
     try {
@@ -402,18 +370,17 @@ app.put("/api/admin/properties/:id", verifyToken, (req, res) => {
           youtube,
           code,
           req.params.id,
-        ],
+        ]
       );
 
       if (updateResult.rows.length === 0) {
         return res.status(404).json({ error: "العقار غير موجود" });
       }
 
-      // رفع صور جديدة إذا وُجدت
       if (req.files && req.files.length > 0) {
         const maxSortResult = await db.query(
           "SELECT COALESCE(MAX(sort_order), -1) AS maxSort FROM property_images WHERE property_id = $1",
-          [req.params.id],
+          [req.params.id]
         );
         let startOrder = maxSortResult.rows[0].maxSort + 1;
 
@@ -426,10 +393,10 @@ app.put("/api/admin/properties/:id", verifyToken, (req, res) => {
                 const imagePath = result.secure_url;
                 await db.query(
                   "INSERT INTO property_images (property_id, image_path, is_cover, sort_order) VALUES ($1, $2, $3, $4)",
-                  [req.params.id, imagePath, i === 0 ? 1 : 0, startOrder + i],
+                  [req.params.id, imagePath, i === 0 ? 1 : 0, startOrder + i]
                 );
                 resolve();
-              },
+              }
             );
             uploadStream.end(file.buffer);
           });
@@ -449,13 +416,11 @@ app.put("/api/admin/properties/:id", verifyToken, (req, res) => {
 // ===== DELETE: Delete Property =====
 app.delete("/api/admin/properties/:id", verifyToken, async (req, res) => {
   try {
-    // جلب الصور المرتبطة بالعقار
     const imagesResult = await db.query(
       "SELECT image_path FROM property_images WHERE property_id = $1",
-      [req.params.id],
+      [req.params.id]
     );
 
-    // حذف الصور من Cloudinary
     if (imagesResult.rows.length > 0) {
       imagesResult.rows.forEach((img) => {
         const parts = img.image_path.split("/");
@@ -467,7 +432,6 @@ app.delete("/api/admin/properties/:id", verifyToken, async (req, res) => {
       });
     }
 
-    // حذف العقار من قاعدة البيانات
     await db.query("DELETE FROM properties WHERE id = $1", [req.params.id]);
     res.json({ message: "تم الحذف" });
   } catch (err) {
