@@ -12,22 +12,18 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || "development_secret";
 
-// ========== Cloudinary Configuration ==========
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME || "d4lm9ymz",
   api_key: process.env.CLOUDINARY_API_KEY || "619481453611176",
   api_secret: process.env.CLOUDINARY_API_SECRET || "GyGi8o8WlZNJS4uJduXxsvhC2l4",
 });
 
-// ========== PostgreSQL Connection (Aiven) ==========
 const connectionString = process.env.DATABASE_URL;
 const cleanConnectionString = connectionString.replace(/[?&]sslmode=[^&]*/g, "");
 
 const db = new Client({
   connectionString: cleanConnectionString,
-  ssl: {
-    rejectUnauthorized: false
-  }
+  ssl: { rejectUnauthorized: false }
 });
 
 db.connect()
@@ -37,14 +33,12 @@ db.connect()
     process.exit(1);
   });
 
-// ========== Multer Storage (Memory) ==========
 const storage = multer.memoryStorage();
 const upload = multer({
   storage: storage,
   limits: { fileSize: 10 * 1024 * 1024 },
 }).array("images", 20);
 
-// ========== Middleware ==========
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -52,7 +46,6 @@ app.use("/public", express.static("public"));
 app.use("/admin", express.static(path.join(__dirname, "admin")));
 app.use("/img", express.static("public/img"));
 
-// ========== Database Initialization ==========
 const initDb = async () => {
   try {
     await db.query(`CREATE TABLE IF NOT EXISTS admins (
@@ -192,7 +185,6 @@ app.post("/api/admin/login", async (req, res) => {
   }
 });
 
-// ===== JWT Verification Middleware =====
 const verifyToken = (req, res, next) => {
   const token = req.headers["authorization"]?.split(" ")[1];
   if (!token) return res.status(401).json({ error: "غير مصرح" });
@@ -233,23 +225,9 @@ app.post("/api/admin/properties", verifyToken, (req, res) => {
     if (err) return res.status(400).json({ error: err.message });
 
     const {
-      title,
-      description,
-      type,
-      purpose,
-      price = 0,
-      location = "",
-      address = "",
-      bedrooms = 0,
-      bathrooms = 0,
-      area = 0,
-      status = "available",
-      is_featured = 0,
-      sort_order = 0,
-      floor = "",
-      facebook = "",
-      youtube = "",
-      code = "",
+      title, description, type, purpose, price = 0, location = "", address = "",
+      bedrooms = 0, bathrooms = 0, area = 0, status = "available",
+      is_featured = 0, sort_order = 0, floor = "", facebook = "", youtube = "", code = "",
     } = req.body;
 
     if (!title || !type || !purpose || !price || price <= 0) {
@@ -262,23 +240,10 @@ app.post("/api/admin/properties", verifyToken, (req, res) => {
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
          RETURNING id`,
         [
-          title,
-          description,
-          type,
-          purpose,
-          Number(price),
-          location,
-          address,
-          Number(bedrooms) || 0,
-          Number(bathrooms) || 0,
-          Number(area) || 0,
-          status,
-          Number(is_featured) || 0,
-          Number(sort_order) || 0,
-          floor,
-          facebook,
-          youtube,
-          code,
+          title, description, type, purpose, Number(price), location, address,
+          Number(bedrooms) || 0, Number(bathrooms) || 0, Number(area) || 0,
+          status, Number(is_featured) || 0, Number(sort_order) || 0, floor,
+          facebook, youtube, code,
         ]
       );
       const propId = insertResult.rows[0].id;
@@ -319,23 +284,9 @@ app.put("/api/admin/properties/:id", verifyToken, (req, res) => {
     if (err) return res.status(400).json({ error: err.message });
 
     const {
-      title,
-      description,
-      type,
-      purpose,
-      price = 0,
-      location = "",
-      address = "",
-      bedrooms = 0,
-      bathrooms = 0,
-      area = 0,
-      status = "available",
-      is_featured = 0,
-      sort_order = 0,
-      floor = "",
-      facebook = "",
-      youtube = "",
-      code = "",
+      title, description, type, purpose, price = 0, location = "", address = "",
+      bedrooms = 0, bathrooms = 0, area = 0, status = "available",
+      is_featured = 0, sort_order = 0, floor = "", facebook = "", youtube = "", code = "",
     } = req.body;
 
     if (!title || !type || !purpose || !price || price <= 0) {
@@ -352,24 +303,10 @@ app.put("/api/admin/properties/:id", verifyToken, (req, res) => {
          WHERE id = $18
          RETURNING id`,
         [
-          title,
-          description,
-          type,
-          purpose,
-          Number(price),
-          location,
-          address,
-          Number(bedrooms) || 0,
-          Number(bathrooms) || 0,
-          Number(area) || 0,
-          status,
-          Number(is_featured) || 0,
-          Number(sort_order) || 0,
-          floor,
-          facebook,
-          youtube,
-          code,
-          req.params.id,
+          title, description, type, purpose, Number(price), location, address,
+          Number(bedrooms) || 0, Number(bathrooms) || 0, Number(area) || 0,
+          status, Number(is_featured) || 0, Number(sort_order) || 0, floor,
+          facebook, youtube, code, req.params.id,
         ]
       );
 

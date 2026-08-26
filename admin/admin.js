@@ -321,30 +321,30 @@ function renderTable(list) {
   });
 }
 
-document.getElementById("searchInput").addEventListener("keyup", function () {
-  const val = this.value.toLowerCase();
-  const codeVal = document.getElementById("searchCode").value.toLowerCase();
-  renderTable(
-    allProps.filter(
-      (p) =>
-        p.title.toLowerCase().includes(val) ||
-        (p.location && p.location.toLowerCase().includes(val)) ||
-        (p.code && p.code.toLowerCase().includes(codeVal))
-    )
-  );
-});
-
-document.getElementById("searchCode").addEventListener("keyup", function () {
-  const val = this.value.toLowerCase();
+// ===== دالة بحث موحدة =====
+function filterTable() {
   const titleVal = document.getElementById("searchInput").value.toLowerCase();
-  renderTable(
-    allProps.filter(
-      (p) =>
-        p.title.toLowerCase().includes(titleVal) ||
-        (p.location && p.location.toLowerCase().includes(titleVal)) ||
-        (p.code && p.code.toLowerCase().includes(val))
-    )
-  );
-});
+  const codeVal = document.getElementById("searchCode").value.toLowerCase();
 
+  renderTable(
+    allProps.filter((p) => {
+      // البحث في العنوان أو الموقع (إذا كتبت في حقل العنوان)
+      const matchTitleOrLocation = !titleVal || 
+        (p.title && p.title.toLowerCase().includes(titleVal)) || 
+        (p.location && p.location.toLowerCase().includes(titleVal));
+
+      // البحث في الكود (إذا كتبت في حقل الكود)
+      const matchCode = !codeVal || (p.code && p.code.toLowerCase().includes(codeVal));
+
+      // إظهار النتيجة إذا تطابق أي منهما
+      return matchTitleOrLocation || matchCode;
+    })
+  );
+}
+
+// ربط الأحداث بالكتابة الفورية
+document.getElementById("searchInput").addEventListener("keyup", filterTable);
+document.getElementById("searchCode").addEventListener("keyup", filterTable);
+
+// استدعاء التحميل الأولي
 loadProps();
