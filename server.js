@@ -6,12 +6,21 @@ const sqlite3 = require("sqlite3").verbose();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
+const cloudinary = require("cloudinary").v2;
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || "development_secret";
 
-// ========== SQLite Connection ==========
+// ========== Cloudinary Configuration ==========
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME || "d4lm9ymz",
+  api_key: process.env.CLOUDINARY_API_KEY || "619481453611176",
+  api_secret:
+    process.env.CLOUDINARY_API_SECRET || "GyGi8o8WlZNJS4uJduXxsvhC2l4",
+});
+
+// ========== SQLite Connection (use /tmp for free tier) ==========
 const db = new sqlite3.Database("/tmp/database.db", (err) => {
   if (err) {
     console.error("❌ خطأ في فتح قاعدة البيانات:", err.message);
@@ -20,30 +29,20 @@ const db = new sqlite3.Database("/tmp/database.db", (err) => {
   console.log("✅ تم الاتصال بقاعدة بيانات SQLite");
 });
 
-// ========== Multer Storage (Local) ==========
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadDir = path.join("/tmp", "uploads");
-    if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname.replace(/\s+/g, "_"));
-  },
-});
-
+// ========== Multer Storage (Memory) ==========
+const storage = multer.memoryStorage();
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 },
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB per image
 }).array("images", 20);
 
 // ========== Middleware ==========
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/uploads", express.static("/tmp/uploads"));
 app.use("/public", express.static("public"));
 app.use("/admin", express.static(path.join(__dirname, "admin")));
+app.use("/img", express.static("public/img"));
 
 // ========== Database Initialization ==========
 const initDb = () => {
@@ -85,7 +84,7 @@ const initDb = () => {
       FOREIGN KEY (property_id) REFERENCES properties(id) ON DELETE CASCADE
     );`);
 
-    // إضافة الأعمدة الجديدة إذا لم تكن موجودة
+    // Add missing columns
     db.all("PRAGMA table_info(properties)", (err, columns) => {
       if (err) return;
       const columnNames = columns.map((c) => c.name);
@@ -99,7 +98,7 @@ const initDb = () => {
       }
     });
 
-    // Create admin if not exists
+    // Create default admin if not exists
     const adminEmail = "admin@mahdy.com";
     db.get(
       "SELECT id FROM admins WHERE email = ?",
@@ -265,15 +264,32 @@ app.post("/api/admin/properties", verifyToken, (req, res) => {
         if (err) return res.status(500).json({ error: err.message });
         const propId = this.lastID;
 
+        // Upload images to Cloudinary (if any)
         if (req.files && req.files.length > 0) {
           const stmt = db.prepare(
             "INSERT INTO property_images (property_id, image_path, is_cover, sort_order) VALUES (?, ?, ?, ?)",
           );
-          req.files.forEach((file, i) => {
-            const imagePath = "/uploads/" + file.filename;
-            stmt.run(propId, imagePath, i === 0 ? 1 : 0, i);
+          const uploadPromises = req.files.map((file, i) => {
+            return new Promise((resolve, reject) => {
+              const uploadStream = cloudinary.uploader.upload_stream(
+                { folder: "real_estate", resource_type: "image" },
+                (error, result) => {
+                  if (error) return reject(error);
+                  const imagePath = result.secure_url;
+                  stmt.run(propId, imagePath, i === 0 ? 1 : 0, i);
+                  resolve();
+                },
+              );
+              uploadStream.end(file.buffer);
+            });
           });
-          stmt.finalize();
+
+          Promise.all(uploadPromises)
+            .then(() => stmt.finalize())
+            .catch((uploadErr) => {
+              console.error("Cloudinary upload error:", uploadErr);
+              return res.status(500).json({ error: "فشل رفع الصور" });
+            });
         }
 
         res.status(201).json({ message: "تم الحفظ بنجاح", id: propId });
@@ -338,25 +354,43 @@ app.put("/api/admin/properties/:id", verifyToken, (req, res) => {
         if (this.changes === 0)
           return res.status(404).json({ error: "العقار غير موجود" });
 
+        // Upload new images if any
         if (req.files && req.files.length > 0) {
           const stmt = db.prepare(
             "INSERT INTO property_images (property_id, image_path, is_cover, sort_order) VALUES (?, ?, ?, ?)",
           );
+          // Get current max sort order
           db.get(
             "SELECT COALESCE(MAX(sort_order), -1) AS maxSort FROM property_images WHERE property_id = ?",
             [req.params.id],
             (err, row) => {
               let startOrder = row.maxSort + 1;
-              req.files.forEach((file, i) => {
-                const imagePath = "/uploads/" + file.filename;
-                stmt.run(
-                  req.params.id,
-                  imagePath,
-                  i === 0 ? 1 : 0,
-                  startOrder + i,
-                );
+              const uploadPromises = req.files.map((file, i) => {
+                return new Promise((resolve, reject) => {
+                  const uploadStream = cloudinary.uploader.upload_stream(
+                    { folder: "real_estate", resource_type: "image" },
+                    (error, result) => {
+                      if (error) return reject(error);
+                      const imagePath = result.secure_url;
+                      stmt.run(
+                        req.params.id,
+                        imagePath,
+                        i === 0 ? 1 : 0,
+                        startOrder + i,
+                      );
+                      resolve();
+                    },
+                  );
+                  uploadStream.end(file.buffer);
+                });
               });
-              stmt.finalize();
+
+              Promise.all(uploadPromises)
+                .then(() => stmt.finalize())
+                .catch((uploadErr) => {
+                  console.error("Cloudinary upload error:", uploadErr);
+                  return res.status(500).json({ error: "فشل رفع الصور" });
+                });
             },
           );
         }
@@ -369,16 +403,22 @@ app.put("/api/admin/properties/:id", verifyToken, (req, res) => {
 
 // ===== DELETE: Delete Property =====
 app.delete("/api/admin/properties/:id", verifyToken, (req, res) => {
-  db.get(
+  db.all(
     "SELECT image_path FROM property_images WHERE property_id = ?",
     [req.params.id],
     (err, images) => {
+      if (err) return res.status(500).json({ error: "Database error" });
       if (images) {
-        const localPath = path.join(
-          __dirname,
-          images.image_path.replace(/^\//, ""),
-        );
-        if (fs.existsSync(localPath)) fs.unlinkSync(localPath);
+        // Delete each image from Cloudinary
+        images.forEach((img) => {
+          // Extract public_id from the secure_url
+          const parts = img.image_path.split("/");
+          const fileName = parts[parts.length - 1]; // e.g., "abc.jpg"
+          const publicId = `real_estate/${fileName.split(".")[0]}`; // remove extension
+          cloudinary.uploader.destroy(publicId, (err, result) => {
+            if (err) console.error("Cloudinary delete error:", err);
+          });
+        });
       }
       db.run("DELETE FROM properties WHERE id = ?", [req.params.id], (err) => {
         if (err) return res.status(500).json({ error: "خطأ في الحذف" });
@@ -387,14 +427,13 @@ app.delete("/api/admin/properties/:id", verifyToken, (req, res) => {
     },
   );
 });
+
 // ===== Home Redirect =====
 app.get("/", (req, res) => {
   res.redirect("/public/index.html");
 });
 
-app.use("/img", express.static("public/img"));
-
-// Health check for Render
+// ===== Health Check =====
 app.get("/healthz", (req, res) => res.send("OK"));
 
 // ===== Start Server =====
