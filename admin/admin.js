@@ -5,12 +5,7 @@ let allProps = [];
 let modalInstance = null;
 
 // دالة ضغط الصور
-const compressImage = (
-  file,
-  quality = 0.7,
-  maxWidth = 1200,
-  maxHeight = 1200,
-) => {
+const compressImage = (file, quality = 0.7, maxWidth = 1200, maxHeight = 1200) => {
   return new Promise((resolve, reject) => {
     if (file.size < 200 * 1024) {
       resolve(file);

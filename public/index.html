@@ -541,6 +541,19 @@
             gap: 5px;
         }
 
+        .property-code {
+            font-size: .9rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .property-code i {
+            color: var(--primary);
+        }
+
         .property-features {
             display: flex;
             justify-content: space-between;
@@ -1427,6 +1440,7 @@
                         <div class="property-type">${property.type || 'عقار'}</div>
                         <h3 class="property-title">${property.title}</h3>
                         <div class="property-location"><i class="bi bi-geo-alt-fill"></i> ${property.location || 'الإسكندرية'}</div>
+                        <div class="property-code"><i class="bi bi-hash"></i> ${property.code || ''}</div>
                         <div class="property-features">
                             <span><i class="bi bi-door-open"></i> ${property.bedrooms || 0}</span>
                             <span><i class="bi bi-droplet"></i> ${property.bathrooms || 0}</span>
