@@ -81,6 +81,7 @@ window.editProp = async function (id) {
 
   document.getElementById("propId").value = p.id;
   document.getElementById("f_title").value = p.title;
+  document.getElementById("f_code").value = p.code || ""; // إضافة
   document.getElementById("f_price").value = p.price;
   document.getElementById("f_type").value = p.type;
   document.getElementById("f_purpose").value = p.purpose;
@@ -127,6 +128,7 @@ window.deleteProp = async function (id) {
 window.saveProperty = async function () {
   const id = document.getElementById("propId").value;
   const title = document.getElementById("f_title").value;
+  const code = document.getElementById("f_code").value; // إضافة
   const price = document.getElementById("f_price").value;
   const type = document.getElementById("f_type").value;
   const purpose = document.getElementById("f_purpose").value;
@@ -157,6 +159,7 @@ window.saveProperty = async function () {
   try {
     const formData = new FormData();
     formData.append("title", title);
+    formData.append("code", code || ""); // إضافة
     formData.append("price", price);
     formData.append("type", type);
     formData.append("purpose", purpose);
@@ -256,7 +259,7 @@ async function loadProps() {
   } catch (e) {
     console.error(e);
     document.getElementById("tableBody").innerHTML = `
-            <tr><td colspan="6" class="text-danger text-center">⚠️ تعذر الاتصال بالسيرفر.</td></tr>`;
+            <tr><td colspan="7" class="text-danger text-center">⚠️ تعذر الاتصال بالسيرفر.</td></tr>`;
   }
 }
 
@@ -275,7 +278,7 @@ function renderTable(list) {
   tbody.innerHTML = "";
   if (list.length === 0) {
     tbody.innerHTML =
-      '<tr><td colspan="6" class="text-center text-muted">لا توجد عقارات حالياً</td></tr>';
+      '<tr><td colspan="7" class="text-center text-muted">لا توجد عقارات حالياً</td></tr>';
     return;
   }
   list.forEach((p) => {
@@ -307,6 +310,7 @@ function renderTable(list) {
     tbody.innerHTML += `
       <tr>
         <td><img src="${cover}" class="img-box" alt="${p.title}"></td>
+        <td>${p.code || "-"}</td>
         <td><strong>${p.title}</strong></td>
         <td>${p.location || "-"}</td>
         <td>${new Intl.NumberFormat().format(p.price)} ج</td>
@@ -324,11 +328,26 @@ function renderTable(list) {
 
 document.getElementById("searchInput").addEventListener("keyup", function () {
   const val = this.value.toLowerCase();
+  const codeVal = document.getElementById("searchCode").value.toLowerCase();
   renderTable(
     allProps.filter(
       (p) =>
         p.title.toLowerCase().includes(val) ||
-        (p.location && p.location.toLowerCase().includes(val)),
+        (p.location && p.location.toLowerCase().includes(val)) ||
+        (p.code && p.code.toLowerCase().includes(codeVal)),
+    ),
+  );
+});
+
+document.getElementById("searchCode").addEventListener("keyup", function () {
+  const val = this.value.toLowerCase();
+  const titleVal = document.getElementById("searchInput").value.toLowerCase();
+  renderTable(
+    allProps.filter(
+      (p) =>
+        p.title.toLowerCase().includes(titleVal) ||
+        (p.location && p.location.toLowerCase().includes(titleVal)) ||
+        (p.code && p.code.toLowerCase().includes(val)),
     ),
   );
 });

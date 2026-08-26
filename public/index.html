@@ -239,7 +239,6 @@
             font-size: 2.8rem;
             font-weight: 800;
             margin-bottom: 20px;
-            /* text-shadow: 0 2px 10px rgba(255, 255, 255, 0.7); */
         }
 
         .hero h1 span {
@@ -326,7 +325,7 @@
 
         .search-row {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(6, 1fr);
             gap: 15px;
         }
 
@@ -1018,11 +1017,11 @@
     <!-- Hero -->
     <section id="home" class="hero">
         <div class="container hero-content">
-            <h1>عقارك المناسب <br><span>يبدأ من هنا</span></h1>
+            <h1>عقارك المناسب <br><span style="color: white;">يبدأ من هنا</span></h1>
             <p style="border: solid yellow;
         background-color: rgb(255, 255, 0);
         border-radius: 50px;
-        color: black;">نساعدك في العثور على أفضل العقارات للبيع والإيجار في أفضل المواقع.</p>
+        color: black;">نساعدك في العثور على أفضل العقارات للبيع والإيجار في أفضل المواقع</p>
             <div class="hero-buttons">
                 <a href="#properties" class="btn-outline-custom"
                     style="background: var(--primary); color: #fff; padding: 10px 24px; border-radius: 50px; font-weight: 600; border: none;">تصفح
@@ -1079,6 +1078,11 @@
                             <option value="4">4+</option>
                             <option value="5">5+</option>
                         </select>
+                    </div>
+                    <!-- حقل البحث عن الكود -->
+                    <div class="search-field">
+                        <label>الكود</label>
+                        <input type="text" id="searchCode" placeholder="مثال: 12345">
                     </div>
                     <div class="search-field">
                         <button id="searchBtn" class="btn-search"><i class="bi bi-search"></i> بحث</button>
@@ -1327,7 +1331,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // ========== JavaScript (Preserved functionality) ==========
+        // ========== JavaScript ==========
         let allProperties = [];
         let currentPurpose = "all";
         let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
@@ -1339,6 +1343,7 @@
         const searchArea = document.getElementById("searchArea");
         const searchPrice = document.getElementById("searchPrice");
         const searchRooms = document.getElementById("searchRooms");
+        const searchCode = document.getElementById("searchCode"); // إضافة
         const searchBtn = document.getElementById("searchBtn");
         const contactAreaSelect = document.getElementById("contactArea");
         const defaultAreas = ['سموحة', 'كفر عبده', 'ستانلي', 'سيدي بشر', 'العصافرة', 'المنتزه', 'ميامي', 'المعمورة'];
@@ -1362,7 +1367,6 @@
                 const data = await response.json();
                 allProperties = data;
                 updateAreaFilter(allProperties);
-                // إزالة السطور التي تسبب الخطأ
                 renderProperties(allProperties);
                 handlePropertyHash();
             } catch (error) {
@@ -1548,12 +1552,13 @@
             }
         }
 
-        // Filter functions (with optional scroll control)
+        // Filter functions
         function filterProperties(shouldScroll = true) {
             const type = searchType.value;
             const area = searchArea.value;
             const maxPrice = Number(searchPrice.value);
             const rooms = searchRooms.value;
+            const code = searchCode.value.trim().toLowerCase(); // قراءة الكود
 
             const filtered = allProperties.filter(p => {
                 const purposeMatch = currentPurpose === "all" || p.purpose === currentPurpose;
@@ -1561,7 +1566,9 @@
                 const areaMatch = area === "all" || p.location === area;
                 const priceMatch = !maxPrice || p.price <= maxPrice;
                 const roomsMatch = rooms === "all" || (p.bedrooms || 0) >= Number(rooms);
-                return purposeMatch && typeMatch && areaMatch && priceMatch && roomsMatch;
+                const codeMatch = !code || (p.code && p.code.toLowerCase().includes(code)); // فلترة بالكود
+
+                return purposeMatch && typeMatch && areaMatch && priceMatch && roomsMatch && codeMatch;
             });
 
             renderProperties(filtered);
@@ -1585,6 +1592,7 @@
         searchArea.addEventListener('change', filterProperties);
         searchPrice.addEventListener('input', filterProperties);
         searchRooms.addEventListener('change', filterProperties);
+        searchCode.addEventListener('input', filterProperties); // إضافة المستمع
 
         document.querySelectorAll(".search-tab").forEach(tab => {
             tab.addEventListener("click", function () {
@@ -1609,6 +1617,7 @@
             searchArea.value = "all";
             searchPrice.value = "";
             searchRooms.value = "all";
+            searchCode.value = ""; // تصفير الكود
             document.querySelectorAll(".search-tab").forEach(t => t.classList.remove("active"));
             document.querySelector('.search-tab[data-purpose="all"]').classList.add("active");
             renderProperties(allProperties);
@@ -1626,13 +1635,17 @@
             const area = searchArea.value;
             const maxPrice = Number(searchPrice.value);
             const rooms = searchRooms.value;
+            const code = searchCode.value.trim().toLowerCase();
+
             return allProperties.filter(p => {
                 const purposeMatch = currentPurpose === "all" || p.purpose === currentPurpose;
                 const typeMatch = type === "all" || p.type === type;
                 const areaMatch = area === "all" || p.location === area;
                 const priceMatch = !maxPrice || p.price <= maxPrice;
                 const roomsMatch = rooms === "all" || (p.bedrooms || 0) >= Number(rooms);
-                return purposeMatch && typeMatch && areaMatch && priceMatch && roomsMatch;
+                const codeMatch = !code || (p.code && p.code.toLowerCase().includes(code));
+
+                return purposeMatch && typeMatch && areaMatch && priceMatch && roomsMatch && codeMatch;
             });
         }
 
@@ -1674,6 +1687,7 @@
                                     <div class="border-top pt-3 mt-3">
                                         <p class="mb-1"><strong>النوع:</strong> ${property.type || 'غير محدد'}</p>
                                         <p class="mb-1"><strong>الدور:</strong> ${property.floor || 'غير محدد'}</p>
+                                        <p class="mb-1"><strong>الكود:</strong> ${property.code || 'غير محدد'}</p> <!-- إضافة -->
                                         <p class="mb-0"><strong>الحالة:</strong> ${property.status === 'available' ? 'متاح' : property.status === 'unavailable' ? 'غير متاح' : property.status === 'sold' ? 'تم البيع' : property.status === 'rented' ? 'تم الايجار' : property.status}</p>
                                     </div>
                                     ${property.facebook ? `
@@ -1705,7 +1719,7 @@
             }
         }
 
-        // Load contact areas with fallback
+        // Load contact areas
         async function loadContactAreas() {
             try {
                 const response = await fetch('/api/properties');
@@ -1763,7 +1777,6 @@
             loadContactAreas();
         });
 
-        // Listen for hash changes to load property
         window.addEventListener('hashchange', handlePropertyHash);
     </script>
 </body>

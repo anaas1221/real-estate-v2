@@ -22,7 +22,6 @@ cloudinary.config({
 
 // ========== PostgreSQL Connection (Aiven) - with SSL disabled verification ==========
 const connectionString = process.env.DATABASE_URL;
-// إزالة sslmode من الرابط إذا كانت موجودة لتجنب مشكلة الشهادة
 const cleanConnectionString = connectionString.replace(
   /[?&]sslmode=[^&]*/g,
   "",
@@ -31,7 +30,7 @@ const cleanConnectionString = connectionString.replace(
 const db = new Client({
   connectionString: cleanConnectionString,
   ssl: {
-    rejectUnauthorized: false, // هذا يتجاوز مشكلة الشهادة الذاتية
+    rejectUnauthorized: false, // يتجاوز مشكلة الشهادة الذاتية
   },
 });
 
@@ -85,6 +84,7 @@ const initDb = async () => {
       floor TEXT,
       facebook TEXT,
       youtube TEXT,
+      code TEXT DEFAULT '',
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );`);
 
@@ -96,6 +96,25 @@ const initDb = async () => {
       sort_order INTEGER DEFAULT 0,
       FOREIGN KEY (property_id) REFERENCES properties(id) ON DELETE CASCADE
     );`);
+
+    // إضافة الأعمدة الجديدة إذا لم تكن موجودة (بما فيها code)
+    const columnsResult = await db.query(
+      "SELECT column_name FROM information_schema.columns WHERE table_name = 'properties'",
+    );
+    const columnNames = columnsResult.rows.map((r) => r.column_name);
+    if (!columnNames.includes("facebook")) {
+      await db.query(
+        "ALTER TABLE properties ADD COLUMN facebook TEXT DEFAULT ''",
+      );
+    }
+    if (!columnNames.includes("youtube")) {
+      await db.query(
+        "ALTER TABLE properties ADD COLUMN youtube TEXT DEFAULT ''",
+      );
+    }
+    if (!columnNames.includes("code")) {
+      await db.query("ALTER TABLE properties ADD COLUMN code TEXT DEFAULT ''");
+    }
 
     // إنشاء حساب المدير الافتراضي إذا لم يكن موجودًا
     const adminEmail = "admin@mahdy.com";
@@ -257,6 +276,7 @@ app.post("/api/admin/properties", verifyToken, (req, res) => {
       floor = "",
       facebook = "",
       youtube = "",
+      code = "",
     } = req.body;
 
     if (!title || !type || !purpose || !price || price <= 0) {
@@ -267,8 +287,8 @@ app.post("/api/admin/properties", verifyToken, (req, res) => {
 
     try {
       const insertResult = await db.query(
-        `INSERT INTO properties (title, description, type, purpose, price, location, address, bedrooms, bathrooms, area, status, is_featured, sort_order, floor, facebook, youtube)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
+        `INSERT INTO properties (title, description, type, purpose, price, location, address, bedrooms, bathrooms, area, status, is_featured, sort_order, floor, facebook, youtube, code)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
          RETURNING id`,
         [
           title,
@@ -287,6 +307,7 @@ app.post("/api/admin/properties", verifyToken, (req, res) => {
           floor,
           facebook,
           youtube,
+          code,
         ],
       );
       const propId = insertResult.rows[0].id;
@@ -344,6 +365,7 @@ app.put("/api/admin/properties/:id", verifyToken, (req, res) => {
       floor = "",
       facebook = "",
       youtube = "",
+      code = "",
     } = req.body;
 
     if (!title || !type || !purpose || !price || price <= 0) {
@@ -358,8 +380,8 @@ app.put("/api/admin/properties/:id", verifyToken, (req, res) => {
          SET title = $1, description = $2, type = $3, purpose = $4, price = $5,
              location = $6, address = $7, bedrooms = $8, bathrooms = $9, area = $10,
              status = $11, is_featured = $12, sort_order = $13, floor = $14,
-             facebook = $15, youtube = $16
-         WHERE id = $17
+             facebook = $15, youtube = $16, code = $17
+         WHERE id = $18
          RETURNING id`,
         [
           title,
@@ -378,6 +400,7 @@ app.put("/api/admin/properties/:id", verifyToken, (req, res) => {
           floor,
           facebook,
           youtube,
+          code,
           req.params.id,
         ],
       );

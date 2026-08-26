@@ -60,27 +60,21 @@
             flex-direction: column;
         }
 
-        /* على الشاشات الكبيرة، القائمة ظاهرة دائمًا */
         @media (min-width: 992px) {
             .sidebar {
                 right: 0;
             }
         }
 
-        /* على الموبايل، القائمة مخفية افتراضيًا */
         @media (max-width: 991px) {
             .sidebar {
                 right: calc(-1 * var(--sidebar-width));
-
-                /* إخفاء خارج الشاشة */
             }
 
             .sidebar.open {
                 right: 0;
-                /* إظهار عند فتح القائمة */
             }
         }
-
 
         .sidebar-logo {
             display: flex;
@@ -109,13 +103,11 @@
             color: var(--accent-light);
         }
 
-        /* زر الإغلاق (X) - أبيض */
         .sidebar-close {
             position: absolute;
             top: 20px;
             left: 20px;
             right: auto;
-
             background: rgba(255, 255, 255, 0.15);
             border: none;
             color: #fff;
@@ -136,12 +128,10 @@
             transform: rotate(90deg);
         }
 
-        /* إخفاء زر الإغلاق افتراضيًا */
         .sidebar-close {
             display: none;
         }
 
-        /* إظهار زر الإغلاق فقط على الموبايل عندما تكون القائمة مفتوحة */
         @media (max-width: 991px) {
             .sidebar.open .sidebar-close {
                 display: flex;
@@ -213,7 +203,6 @@
             transition: margin-right .4s ease;
         }
 
-        /* على الموبايل، المحتوى ياخد كامل الشاشة */
         @media (max-width: 991px) {
             .main-content {
                 margin-right: 0;
@@ -253,7 +242,6 @@
             color: var(--text-dark);
         }
 
-        /* زر القائمة (3 شرط) - يظهر فقط على الموبايل */
         .btn-toggle {
             display: none;
             background: var(--bg-light);
@@ -567,7 +555,6 @@
 
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
-        <!-- زر الإغلاق (X) - يظهر فقط عندما تكون القائمة مفتوحة على الموبايل -->
         <button class="sidebar-close" onclick="toggleSidebar()" title="إغلاق القائمة">
             <i class="bi bi-x-lg"></i>
         </button>
@@ -589,7 +576,6 @@
     <div class="main-content">
         <div class="main-header">
             <div style="display:flex; align-items:center; gap:15px;">
-                <!-- زر الـ 3 شرط (Hamburger) - يظهر فقط على الموبايل -->
                 <button class="btn-toggle" onclick="toggleSidebar()">
                     <i class="bi bi-list"></i>
                 </button>
@@ -632,6 +618,10 @@
                         <i class="bi bi-search"></i>
                         <input type="text" id="searchInput" placeholder="بحث بالعنوان أو الموقع...">
                     </div>
+                    <div class="search-box">
+                        <i class="bi bi-search"></i>
+                        <input type="text" id="searchCode" placeholder="بحث بالكود...">
+                    </div>
                     <button class="btn-add" onclick="openAddModal()"><i class="bi bi-plus-lg"></i> إضافة عقار</button>
                 </div>
             </div>
@@ -640,6 +630,7 @@
                     <thead>
                         <tr>
                             <th>الصورة</th>
+                            <th>الكود</th>
                             <th>العنوان</th>
                             <th>الموقع</th>
                             <th>السعر</th>
@@ -668,6 +659,11 @@
                             <div class="col-md-6">
                                 <label class="form-label">العنوان</label>
                                 <input type="text" class="form-control" id="f_title" name="title" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">الكود</label>
+                                <input type="text" class="form-control" id="f_code" name="code"
+                                    placeholder="مثال: 12345">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">السعر (جنيه)</label>
