@@ -71,6 +71,7 @@
         @media (max-width: 991px) {
             .sidebar {
                 right: calc(-1 * var(--sidebar-width));
+
                 /* إخفاء خارج الشاشة */
             }
 
@@ -112,7 +113,9 @@
         .sidebar-close {
             position: absolute;
             top: 20px;
-            right: 20px;
+            left: 20px;
+            right: auto;
+
             background: rgba(255, 255, 255, 0.15);
             border: none;
             color: #fff;
